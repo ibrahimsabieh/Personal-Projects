@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <base target="_top">
+</head>
+
+<body>
+    <p>Script is running, please be patient...</p>
+    <script>
+        // Poll the server every second to check if main process started
+        setInterval(function () {
+            google.script.run.withSuccessHandler(function (started) {
+                if (started) {
+                    // Close this dialog
+                    google.script.host.close();
+
+                    // Open the progress dialog
+                    google.script.run.showProgressDialog();
+                }
+            }).hasMainProcessStarted();
+        }, 1000);
+    </script>
+</body>
+
+</html>

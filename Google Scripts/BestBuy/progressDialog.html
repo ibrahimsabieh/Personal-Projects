@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <base target="_top">
+</head>
+
+<body>
+    <p>Getting progress...</p>
+    <p id="progressDisplay"></p>
+    <script>
+        // Poll the server for progress every second
+        setInterval(function () {
+            google.script.run.withSuccessHandler(function (progress) {
+                document.getElementById('progressDisplay').innerHTML =
+                    progress.current + " / " + progress.total + " Devices obtained";
+            }).getProgress();
+        }, 1000);
+    </script>
+</body>
+
+</html>
