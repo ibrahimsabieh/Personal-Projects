@@ -16,12 +16,6 @@ function createDataSheet(sheetName) {
     }
 }
 
-function uiProgressAlert(ui, ith, numPhones) {
-
-    ui.alert(ith.toString() + "/" + numPhones.toString() + " Phones Gathered")
-
-}
-
 function getDeviceList(url, headers) {
     for (attempts = 0; attempts < 4; attempts++) {
         // request to get list of devices
