@@ -12,9 +12,9 @@
         setInterval(function () {
             google.script.run.withSuccessHandler(function (started) {
                 if (started) {
+                    console.log("RUNNING")
                     // Close this dialog
                     google.script.host.close();
-
                     // Open the progress dialog
                     google.script.run.showProgressDialog();
                 }

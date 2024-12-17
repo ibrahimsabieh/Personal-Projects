@@ -122,6 +122,31 @@ function getPrice(url, sku, screenCon, condition, headers) {
     }
 }
 
+function hasMainProcessStarted() {
+    var value = PropertiesService.getScriptProperties().getProperty('mainProcessStarted');
+    return value === 'true'
+}
+
+function updateProgress(i, total) {
+    PropertiesService.getScriptProperties().setProperty('currentProgress', i.toString());
+    PropertiesService.getScriptProperties().setProperty('totalPhones', total.toString());
+}
+
+// Called by the progress dialog html to get current progress
+function getProgress() {
+    var props = PropertiesService.getScriptProperties();
+    var current = parseInt(props.getProperty('currentProgress'), 10) || 0;
+    var total = parseInt(props.getProperty('totalPhones'), 10) || 0;
+    return { current: current, total: total };
+}
+
+// This function is called from the client once the initial dialog closes
+function showProgressDialog() {
+    var html = HtmlService.createHtmlOutputFromFile('progressDialog')
+        .setWidth(300)
+        .setHeight(150);
+    SpreadsheetApp.getUi().showModalDialog(html, "Progress");
+}
 
 function main() {
     spreadSheet = createDataSheet("BestBuy Trade-in Values");
@@ -157,11 +182,14 @@ function main() {
     var numPhones = data.length;
     var phoneInfo = []; // list of dict for individual phone info (name, value, price->screen condition->condition->price, sku)
 
+
     const html = HtmlService.createHtmlOutputFromFile('initalDialog')
         .setWidth(250)
         .setHeight(200)
     var ui = SpreadsheetApp.getUi()
     ui.showModalDialog(html, "Running Script, Please be Patient")
+
+
 
     for (i = 0; i < numPhones; i++) {
         // Value key is for how info in calls are formated, name key is info formated for display
@@ -170,13 +198,15 @@ function main() {
         phoneInfo.push({ "value": tempPhoneVal, "name": tempPhoneName, "price": { "Yes": {}, "No": {} }, "sku": "" });
     }
 
+    // Changes ui to progress ui from initial ui
+    PropertiesService.getScriptProperties().setProperty('mainProcessStarted', 'true');
     // request to get list of carriers based on phone
     for (var i = 0; i < numPhones; i++) {
         Logger.log(i)
         Logger.log(phoneInfo[i])
 
-        // Update Progress Every 5 iterations
-        if (i % 5 === 0) { uiProgressAlert(ui, i, numPhones) }
+        // Update Progress Every Iteration
+        updateProgress(i, numPhones);
 
         var tempPhoneVal = phoneInfo[i]["value"]
         // request to get carrier
