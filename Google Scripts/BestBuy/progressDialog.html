@@ -14,8 +14,9 @@
             google.script.run.withSuccessHandler(function (progress) {
                 document.getElementById('progressDisplay').innerHTML =
                     progress.current + " / " + progress.total + " Devices obtained";
+                if (progress.current === progress.total) { google.script.host.close() }
             }).getProgress();
-        }, 1000);
+        }, 2000);
     </script>
 </body>
 

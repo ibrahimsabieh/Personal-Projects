@@ -121,6 +121,11 @@ function hasMainProcessStarted() {
     return value === 'true'
 }
 
+function hasMainProcessEnded() {
+    var value = PropertiesService.getScriptProperties().getProperty('mainProcessEnded');
+    return value === 'true'
+}
+
 function updateProgress(i, total) {
     PropertiesService.getScriptProperties().setProperty('currentProgress', i.toString());
     PropertiesService.getScriptProperties().setProperty('totalPhones', total.toString());
@@ -129,6 +134,7 @@ function updateProgress(i, total) {
 // Called by the progress dialog html to get current progress
 function getProgress() {
     var props = PropertiesService.getScriptProperties();
+    // get string value and convert to base 10 int
     var current = parseInt(props.getProperty('currentProgress'), 10) || 0;
     var total = parseInt(props.getProperty('totalPhones'), 10) || 0;
     return { current: current, total: total };
@@ -137,8 +143,8 @@ function getProgress() {
 // This function is called from the client once the initial dialog closes
 function showProgressDialog() {
     var html = HtmlService.createHtmlOutputFromFile('progressDialog')
-        .setWidth(300)
-        .setHeight(150);
+        .setWidth(450)
+        .setHeight(300);
     SpreadsheetApp.getUi().showModalDialog(html, "Progress");
 }
 
@@ -178,12 +184,10 @@ function main() {
 
 
     const html = HtmlService.createHtmlOutputFromFile('initalDialog')
-        .setWidth(250)
-        .setHeight(200)
+        .setWidth(450)
+        .setHeight(300)
     var ui = SpreadsheetApp.getUi()
     ui.showModalDialog(html, "Running Script, Please be Patient")
-
-
 
     for (i = 0; i < numPhones; i++) {
         // Value key is for how info in calls are formated, name key is info formated for display
@@ -244,6 +248,7 @@ function main() {
         }
         Logger.log(JSON.stringify(phoneInfo[i]))
     }
+    updateProgress(i, numPhones);
 
     // var spreadSheet = SpreadsheetApp.getActiveSpreadsheet()
     // var cell = spreadSheet.getActiveCell();
