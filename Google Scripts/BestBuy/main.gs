@@ -1,3 +1,11 @@
+// This script pulls the trade in values of iPhones from Best Buy and lists them
+// on a google sheet.
+//
+// Todo: 
+// Expand script to cover other devices
+// Add more ui menu items that may be necessary with any changes made
+
+
 function main() {
     spreadSheet = createDataSheet("BestBuy Trade-in Values");
 
