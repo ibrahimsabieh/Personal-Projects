@@ -1,6 +1,10 @@
 // This script pulls the trade in values of iPhones from Best Buy and lists them
 // on a google sheet.
 //
+// Due to how Google App Script's run time enviorment works
+// all scripts inside a project are apart of the same global enviorment
+// and do not require any import/export statements
+//
 // Todo: 
 // Expand script to cover other devices
 // Add more ui menu items that may be necessary with any changes made
