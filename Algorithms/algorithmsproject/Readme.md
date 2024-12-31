@@ -1,0 +1,1 @@
+This folder contains the code for an algorithm project focusing on shortest path algorithms A*, Dijstra, and Floyds
